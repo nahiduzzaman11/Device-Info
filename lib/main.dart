@@ -218,7 +218,7 @@ class _MyAppState extends State<MyApp> {
         _deviceInfo['Product'] = androidInfo.product;
         _deviceInfo['Tags'] = androidInfo.tags;
         _deviceInfo['Type'] = androidInfo.type;
-
+        _deviceInfo['OperatingSystem'] = Platform.operatingSystem;
         // _deviceInfo['bootloader'] = androidInfo.bootloader;
         // _deviceInfo['serialNumber'] = androidInfo.serialNumber;
         // _deviceInfo['isLowRamDevice'] = androidInfo.isLowRamDevice;
@@ -252,9 +252,20 @@ class _MyAppState extends State<MyApp> {
         _deviceInfo['SystemName'] = iosInfo.systemName;
         //_deviceInfo['data'] = iosInfo.data.length;
         //_deviceInfo['isPhysicalDevice'] = iosInfo.isPhysicalDevice;
-        //_deviceInfo['utsname'] = iosInfo.utsname;
+        //_deviceInfo['utsname'] = "${iosInfo.utsname.version}";
+
+        _deviceInfo['OperatingSystem'] = Platform.operatingSystem;
+        List<String> data = [
+          iosInfo.model,
+          iosInfo.name,
+          iosInfo.systemVersion,
+          "${iosInfo.identifierForVendor}",
+          iosInfo.localizedModel,
+          iosInfo.systemName
+        ];
+        _uniqueDeviceId = base64Encode(utf8.encode(data.join('|')));
       }
-      _deviceInfo['OperatingSystem'] = Platform.operatingSystem;
+
     } on PlatformException catch (e) {
       // Handle platform-specific exceptions
       print('Error getting device info: ${e.message}');
@@ -296,7 +307,7 @@ class _MyAppState extends State<MyApp> {
                           String value = _deviceInfo[key];
                           return ListTile(
                             title: Text(key),
-                            subtitle: Text(value),
+                            subtitle: Text("${value}"),
                           );
                         },
                       ),
